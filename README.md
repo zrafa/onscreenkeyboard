@@ -1,10 +1,44 @@
 onscreenkeyboard
 ================
 
-on-screen keyboard ideas
+2014 - Rafael Ignacio Zurita
+
+This is an on-screen keyboard proof of concept
+
+osk.c source file implements this.
+ - No extra libraries. Great for using at boot time :
+	# ldd osk
+        linux-gate.so.1 
+        libc.so.6 => /lib/i386-linux-gnu/i686/cmov/libc.so.6 
+        /lib/ld-linux.so.2 
+ - on scren keyboard using framebuffer. Ok for console
+ - it sends keystrokes using uinput
 
 
-Some proof of concept of on-screen keyboard
+How to use
+==========
+
+make
+modprobe uinput
+# be sure that /dev/input/event0 is your real keyboard (you need it to choose keys from onscreen keyboard)
+./osk #YOU NEED TO BE ROOT
+
+You will see the on screen keyboard on console on top of framebuffer.
+There is green box which go from "a" to "z" delaying one second
+on every letter. YOu have "E" for ENTER after "z"
+When you press the "End" key on your real keyboard, you choose
+the letter where green box is, and the program sends a 
+proper keystrokes to the system using uinput.
+
+For example, if green box is under "l", and you press the "END" key
+on your keyboard, you will see the "l" showed on console, like
+if you would had pressed the "l" key.
+
+Check the video to know the idea and proof of concept working :
+
+
+Old ideas
+=========
 
 The idea is :
 
