@@ -322,7 +322,11 @@ fcntl(fdkey, F_SETFL, flags | O_NONBLOCK);
 	int j, m=0,k;
 	while(1) {
 		m++;
-		if (m==27) m=0;
+		if (m==29) m=0; /* 27 keys, and 2 extra seconds for exit */
+
+
+
+
 
 		fb_drawimage("image.ppm", fbp, vinfo.xoffset, vinfo.yoffset, vinfo.bits_per_pixel, finfo.line_length);
 
@@ -357,9 +361,9 @@ fcntl(fdkey, F_SETFL, flags | O_NONBLOCK);
 
 	}
 
+
 	/* check for key */
 	k=0;
-	
 	err=-1;
 	while ((err==-1) && (k<1000)) {
     	err = read(fdkey, &evkey, sizeof(struct input_event));
@@ -367,18 +371,22 @@ fcntl(fdkey, F_SETFL, flags | O_NONBLOCK);
 	usleep(1000);
 	}
 
-    if ((err!=-1) && (evkey.type == 1)) {
+    if (err!=-1) {
+	if ((evkey.type==1) && (evkey.value==0)) {
 
-		if (primer==0) {
+			if ((m==27) || (m==28)) break;
 			send_event(fd, EV_KEY, abc[m], 1);
 			send_event(fd, EV_SYN, SYN_REPORT, 0);
 			send_event(fd, EV_KEY, abc[m], 0);
 			send_event(fd, EV_SYN, SYN_REPORT, 0);
-			primer++;
-		} else
-			primer=0;
+	} else {
+		if (m==0)
+			m=27;
+		else
+			m--;
+		}
+		printf("%i",m);
 	}
-
 
 
 	}
