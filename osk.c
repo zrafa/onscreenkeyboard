@@ -365,7 +365,7 @@ fcntl(fdkey, F_SETFL, flags | O_NONBLOCK);
 	/* check for key */
 	k=0;
 	err=-1;
-	while ((err==-1) && (k<1000)) {
+	while ((err==-1) && (k<500)) {
     	err = read(fdkey, &evkey, sizeof(struct input_event));
 	k++;
 	usleep(1000);
