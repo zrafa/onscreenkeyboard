@@ -200,17 +200,6 @@ int main(void) {
 		if (m==27) m=0;
 
 		fb_drawimage("image.ppm", fbp, vinfo.xoffset, vinfo.yoffset, vinfo.bits_per_pixel, finfo.line_length);
-	/* check for key */
-	for (waiting=0; waiting<10000; waiting++) {
-	        usleep(1);
-		i=kbhit();
-		if (i!=0)
-		{
-			c=fgetc(stdin);
-			if (c==10)
-       	         		printf("%c",'a'+(m-1));
-       	 	}
-	}
 
 		for (j=0;j<54;j=j+2) {
 			// printf("%i\n",j);
@@ -241,6 +230,19 @@ int main(void) {
 
          }
 
+	}
+
+	/* check for key */
+	for (waiting=0; waiting<10000; waiting++) {
+	        usleep(1);
+		i=kbhit();
+		if (i!=0)
+		{
+			c=fgetc(stdin);
+			if (c==10)
+       	         		printf("%c",'a'+(m));
+				fflush(0);
+       	 	}
 	}
 	}
 
