@@ -2,7 +2,8 @@
 /*
  * osk.c : framebuffer on-screen keyboard
  * 
- * Copyright (C) 2014 Rafael Ignacio Zurita <rizurita@yahoo.com>
+ * Copyright (C) 2014 Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>
+ *
  * Based on : http://thiemonge.org/getting-started-with-uinput
  * and www.cubieforums.com/index.php?topic=33.0
  * and fb_drawimage() from https://svn.mcs.anl.gov/repos/ZeptoOS/trunk/BGP/packages/busybox/src/miscutils/fbsplash.c 
@@ -235,7 +236,7 @@ int main(void) {
 
 
 	/* Open the file for reading and writing */
-	fbfd = open("/dev/fb0", O_RDWR);
+	fbfd = open("/dev/fb1", O_RDWR);
 	if (fbfd == -1) {
 		perror("Error: cannot open framebuffer device");
 		exit(1);

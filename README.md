@@ -6,7 +6,7 @@ This is a framebuffer on-screen keyboard proof of concept
 
 
 ```
- * Copyright (C) 2014 Rafael Ignacio Zurita <rizurita@yahoo.com>
+ * Copyright (C) 2014 Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>
  *
  *   osk.c is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
