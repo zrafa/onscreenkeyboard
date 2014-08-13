@@ -11,6 +11,7 @@
 #include <linux/uinput.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <sys/select.h>
@@ -117,18 +118,13 @@ static void fb_drawimage(const char *filename, char *fbp, int xo, int yo, int bp
 		}
 
 		for (i = 0; i < width; i++) {
-			unsigned thispix;
-			thispix = (((unsigned)pixel[0] << 8) & 0xf800)
-				| (((unsigned)pixel[1] << 3) & 0x07e0)
-				| (((unsigned)pixel[2] >> 3));
 			pixel += 3;
-             location = (i+xo) * (bpp/8) +
-                        (j+yo) * length;
+			location = (i+xo) * (bpp/8) + (j+yo) * length;
 
-                 *(fbp + location) = (((unsigned)pixel[0]));
-                 *(fbp + location + 1) = (((unsigned)pixel[1]));
-                 *(fbp + location + 2) = (((unsigned)pixel[2]));
-                 *(fbp + location + 3) = 2;      /* No transparency */
+			*(fbp + location) = (((unsigned)pixel[0]));
+			*(fbp + location + 1) = (((unsigned)pixel[1]));
+			*(fbp + location + 2) = (((unsigned)pixel[2]));
+			*(fbp + location + 3) = 2;      /* No transparency */
 		}
 	}
 	free(pixline);
@@ -172,24 +168,12 @@ int main(void) {
 	memset(&device, 0, sizeof device);
 
 	fd=open("/dev/uinput",O_WRONLY);
-	strcpy(device.name,"test mouse");
+	strcpy(device.name,"test keyboard");
 
 	device.id.bustype=BUS_USB;
 	device.id.vendor=1;
 	device.id.product=1;
 	device.id.version=1;
-
-	for (i=0; i < ABS_MAX; i++) {
-		device.absmax[i] = -1;
-		device.absmin[i] = -1;
-		device.absfuzz[i] = -1;
-		device.absflat[i] = -1;
-	}
-
-	device.absmin[ABS_X]=0;
-	device.absmax[ABS_X]=255;
-	device.absfuzz[ABS_X]=0;
-	device.absflat[ABS_X]=0;
 
 	if (write(fd,&device,sizeof(device)) != sizeof(device))
 	{
@@ -219,6 +203,7 @@ int main(void) {
 	/* end uinput init */
 
 
+	/* init framebuffer */
 	/* Open the file for reading and writing */
 	fbfd = open("/dev/fb0", O_RDWR);
 	if (fbfd == -1) {
@@ -253,10 +238,8 @@ int main(void) {
 	}
 	printf("The framebuffer device was mapped to memory successfully.\n");
 
-	x = 300; y = 100;       // Where we are going to put the pixel
+	/* end init framebuffer */
 
-
-	int waiting;
 
 
 	/* init event0 */
@@ -270,7 +253,6 @@ int main(void) {
 	/* end init event0 */
 
 
-	int primer = 0;
 	int j, m=0,k;
 	while(1) {
 		m++;
