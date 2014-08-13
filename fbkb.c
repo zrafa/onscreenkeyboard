@@ -153,17 +153,19 @@ static void fb_drawimage(const char *filename, char *fbp, int xo, int yo, int bp
 		m++;
 		if (m==31) m=1;
 		sleep(1);
-		for (j=1;j<31;j++) {
+		/* for (j=1;j<31;j++) { */
+		for (j=0;j<54;j=j+2) {
+			// printf("%i\n",j);
      // Figure out where in memory to put the pixel
-     for (y = 10; y < 20; y++)
-         for (x = 10*j; x < 10*j+8; x++) {
+     for (y = 20; y < 30; y++)
+         for (x = 12*j; x < 12*j+8; x++) {
 
              location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) +
                         (y+vinfo.yoffset) * finfo.line_length;
 
              if (vinfo.bits_per_pixel == 32) {
                  *(fbp + location) = 100;        // Some blue
-		if (j==m) {
+		if ((j/2)==m) {
                  *(fbp + location + 1) = 200;     // A little green
                  *(fbp + location + 2) = 100;    // A lot of red
 		} else {
