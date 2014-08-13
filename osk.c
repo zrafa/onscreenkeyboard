@@ -301,14 +301,21 @@ int main(void) {
 
      x = 300; y = 100;       // Where we are going to put the pixel
 
-    char c;
-    i=0;
-    
-    nonblock(NB_ENABLE);
 
 	int waiting;
 
 
+	/* init event0 */
+    int fdkey;
+    fdkey = open("/dev/input/event0", O_RDONLY);
+    struct input_event evkey;
+
+int flags = fcntl(fd, F_GETFL, 0);
+int err;
+fcntl(fdkey, F_SETFL, flags | O_NONBLOCK);
+
+
+	/* end init event0 */
 
 
 	int j, m=0,k;
@@ -350,26 +357,20 @@ int main(void) {
 	}
 
 	/* check for key */
-	k=48;
-	for (waiting=0; waiting<10000; waiting++) {
-	        usleep(1);
-		i=kbhit();
-		if (i!=0)
-		{
-			c=fgetc(stdin);
-			if (c==10) {
-       	         		//printf("caracter %c",'a'+(m));
-       	         		//printf("caracter m=%i, abc=%i",m, abc[m]);
-				//fflush(0);
-				k = m;
-			}
-       	 	}
-	}
+	k=0;
 	
-	if (k!=48) {
-		send_event(fd, EV_KEY, abc[k], 1);
+	err=-1;
+	while ((err==-1) && (k<1000)) {
+    err = read(fdkey, &evkey, sizeof(struct input_event));
+	k++;
+	usleep(100);
+	}
+
+    if ((err!=-1) && (evkey.type == 1)) {
+
+		send_event(fd, EV_KEY, abc[m], 1);
 		send_event(fd, EV_SYN, SYN_REPORT, 0);
-		send_event(fd, EV_KEY, abc[k], 0);
+		send_event(fd, EV_KEY, abc[m], 0);
 		send_event(fd, EV_SYN, SYN_REPORT, 0);
 	}
 
