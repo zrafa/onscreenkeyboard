@@ -14,6 +14,9 @@ osk.c source file implements this.
  - on scren keyboard using framebuffer. Ok for console
  - it sends keystrokes using uinput
 
+Check the video to know the idea and proof of concept working :
+http://youtu.be/zHOJGq4hkpg
+
 
 How to use
 ==========
@@ -34,7 +37,6 @@ For example, if green box is under "l", and you press the "END" key
 on your keyboard, you will see the "l" showed on console, like
 if you would had pressed the "l" key.
 
-Check the video to know the idea and proof of concept working :
 
 
 Old ideas
