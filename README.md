@@ -1,11 +1,21 @@
 onscreenkeyboard
 ================
 
-2014 - Rafael Ignacio Zurita
 
-This is an on-screen keyboard proof of concept
+This is a framebuffer on-screen keyboard proof of concept
+
+
+```
+ * Copyright (C) 2014 Rafael Ignacio Zurita <rizurita@yahoo.com>
+ *
+ *   osk.c is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version. Check COPYING file.
+```
 
 osk.c source file implements this.
+
  - No extra libraries. Great for using at boot time :
 ```
 	# ldd osk

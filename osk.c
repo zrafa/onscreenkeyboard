@@ -1,8 +1,23 @@
 
 /*
- * on-screen keyboard
- * 2014 - Rafael Zurita
+ * osk.c : framebuffer on-screen keyboard
+ * 
+ * Copyright (C) 2014 Rafael Ignacio Zurita <rizurita@yahoo.com>
+ * Based on : http://thiemonge.org/getting-started-with-uinput
+ * and www.cubieforums.com/index.php?topic=33.0
+ * and fb_drawimage() from https://svn.mcs.anl.gov/repos/ZeptoOS/trunk/BGP/packages/busybox/src/miscutils/fbsplash.c 
+ *
+ *   osk.c is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ *    You should have received a copy of the GNU Library General Public
+ *    License along with this software (check COPYING); if not, write to the Free
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
+
 
 #include <fcntl.h>
 #include <linux/fb.h>
