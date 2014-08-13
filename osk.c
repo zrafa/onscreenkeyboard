@@ -277,68 +277,62 @@ int main(void) {
 		if (m==29) m=0; /* 27 keys, and 2 extra seconds for exit */
 
 
-
-
-
 		fb_drawimage("image.ppm", fbp, vinfo.xoffset, vinfo.yoffset, vinfo.bits_per_pixel, finfo.line_length);
 
 		for (j=0;j<54;j=j+2) {
-			// printf("%i\n",j);
-     // Figure out where in memory to put the pixel
-     for (y = 20; y < 30; y++)
-         for (x = 12*j; x < 12*j+8; x++) {
+     		for (y = 20; y < 30; y++)
+         		for (x = 12*j; x < 12*j+8; x++) {
 
-             location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) +
-                        (y+vinfo.yoffset) * finfo.line_length;
+				location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) +
+					(y+vinfo.yoffset) * finfo.line_length;
 
-             if (vinfo.bits_per_pixel == 32) {
-                 *(fbp + location) = 100;        // Some blue
-		if ((j/2)==m) {
-                 *(fbp + location + 1) = 200;     // A little green
-                 *(fbp + location + 2) = 100;    // A lot of red
-		} else {
-                 *(fbp + location + 1) = 100;     // A little green
-                 *(fbp + location + 2) = 200;    // A lot of red
+			if (vinfo.bits_per_pixel == 32) {
+				*(fbp + location) = 100;        // Some blue
+				if ((j/2)==m) {
+					*(fbp + location + 1) = 200;     // A little green
+					*(fbp + location + 2) = 100;    // A lot of red
+				} else {
+					*(fbp + location + 1) = 100;     // A little green
+					*(fbp + location + 2) = 200;    // A lot of red
+				}
+				*(fbp + location + 3) = 100;      // No transparency
+			} else  { /* assume 16bpp */
+				int b = 10;
+				int g = (x-100)/6;     // A little green
+				int r = 31-(y-100)/16;    // A lot of red
+				unsigned short int t = r<<11 | g << 5 | b;
+				*((unsigned short int*)(fbp + location)) = t;
+			}
+
 		}
-                 *(fbp + location + 3) = 100;      // No transparency
-             } else  { //assume 16bpp
-                 int b = 10;
-                 int g = (x-100)/6;     // A little green
-                 int r = 31-(y-100)/16;    // A lot of red
-                 unsigned short int t = r<<11 | g << 5 | b;
-                 *((unsigned short int*)(fbp + location)) = t;
-             }
-
-         }
-
-	}
-
-
-	/* check for key */
-	k=0;
-	err=-1;
-	while ((err==-1) && (k<500)) {
-    	err = read(fdkey, &evkey, sizeof(struct input_event));
-	k++;
-	usleep(1000);
-	}
-
-    if (err!=-1) {
-	if ((evkey.type==1) && (evkey.value==0)) {
-
-			if ((m==27) || (m==28)) break;
-			send_event(fd, EV_KEY, abc[m], 1);
-			send_event(fd, EV_SYN, SYN_REPORT, 0);
-			send_event(fd, EV_KEY, abc[m], 0);
-			send_event(fd, EV_SYN, SYN_REPORT, 0);
-	} else {
-		if (m==0)
-			m=27;
-		else
-			m--;
 		}
-		printf("%i",m);
-	}
+
+
+		/* check for key */
+		k=0;
+		err=-1;
+		while ((err==-1) && (k<500)) {
+			err = read(fdkey, &evkey, sizeof(struct input_event));
+			k++;
+			usleep(1000);
+		}
+
+		if (err!=-1) {
+			if ((evkey.type==1) && (evkey.value==0)) {
+
+				if ((m==27) || (m==28)) break;
+				send_event(fd, EV_KEY, abc[m], 1);
+				send_event(fd, EV_SYN, SYN_REPORT, 0);
+				send_event(fd, EV_KEY, abc[m], 0);
+				send_event(fd, EV_SYN, SYN_REPORT, 0);
+			} else {
+				if (m==0)
+					m=27;
+				else
+					m--;
+			}
+			printf("%i",m);
+		}
 
 
 	}
