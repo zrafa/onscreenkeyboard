@@ -1,16 +1,28 @@
 onscreenkeyboard
 ================
 
-2014 - Rafael Ignacio Zurita
 
-This is an on-screen keyboard proof of concept
+This is a framebuffer on-screen keyboard proof of concept
+
+
+```
+ * Copyright (C) 2014 Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>
+ *
+ *   osk.c is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version. Check COPYING file.
+```
 
 osk.c source file implements this.
+
  - No extra libraries. Great for using at boot time :
+```
 	# ldd osk
         linux-gate.so.1 
         libc.so.6 => /lib/i386-linux-gnu/i686/cmov/libc.so.6 
         /lib/ld-linux.so.2 
+```
  - on scren keyboard using framebuffer. Ok for console
  - it sends keystrokes using uinput
 
@@ -22,11 +34,22 @@ How to use
 ==========
 
 ```
-# Be sure that /dev/input/event0 is your real keyboard, you need it to choose keys from onscreen keyboard
+# Be sure that /dev/input/event0 is your real keyboard, 
+# you need it to choose keys from onscreen keyboard
 
 make
 modprobe uinput
-./osk #YOU NEED TO BE ROOT
+./osk &  #YOU NEED TO BE ROOT
+
+# Use "END" key from your keyboard to choose a key from the
+# on screen keyboard. Otherwise your console or bash
+# could get two keys, the one you pressed and the choosed
+# from the on screen keyboard.
+
+# When you want to exit, you should press your "END" key in your
+# keyboard when green box dissappear from keyboard on screen
+# for two seconds. That happens every time it reachs to the 
+# end of the on screen keyboard keys
 
 ```
 
