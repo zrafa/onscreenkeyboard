@@ -194,14 +194,14 @@ int main(void) {
 
 
 
-    fb_drawimage("image.ppm", fbp, vinfo.xoffset, vinfo.yoffset, vinfo.bits_per_pixel, finfo.line_length);
 	int j, m=0;
 	while(1) {
 		m++;
-		if (m==31) m=1;
+		if (m==27) m=0;
 
+		fb_drawimage("image.ppm", fbp, vinfo.xoffset, vinfo.yoffset, vinfo.bits_per_pixel, finfo.line_length);
 	/* check for key */
-	for (waiting=0; waiting<1000; waiting++) {
+	for (waiting=0; waiting<10000; waiting++) {
 	        usleep(1);
 		i=kbhit();
 		if (i!=0)
