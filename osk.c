@@ -318,6 +318,7 @@ fcntl(fdkey, F_SETFL, flags | O_NONBLOCK);
 	/* end init event0 */
 
 
+	int primer = 0;
 	int j, m=0,k;
 	while(1) {
 		m++;
@@ -361,17 +362,21 @@ fcntl(fdkey, F_SETFL, flags | O_NONBLOCK);
 	
 	err=-1;
 	while ((err==-1) && (k<1000)) {
-    err = read(fdkey, &evkey, sizeof(struct input_event));
+    	err = read(fdkey, &evkey, sizeof(struct input_event));
 	k++;
-	usleep(100);
+	usleep(1000);
 	}
 
     if ((err!=-1) && (evkey.type == 1)) {
 
-		send_event(fd, EV_KEY, abc[m], 1);
-		send_event(fd, EV_SYN, SYN_REPORT, 0);
-		send_event(fd, EV_KEY, abc[m], 0);
-		send_event(fd, EV_SYN, SYN_REPORT, 0);
+		if (primer==0) {
+			send_event(fd, EV_KEY, abc[m], 1);
+			send_event(fd, EV_SYN, SYN_REPORT, 0);
+			send_event(fd, EV_KEY, abc[m], 0);
+			send_event(fd, EV_SYN, SYN_REPORT, 0);
+			primer++;
+		} else
+			primer=0;
 	}
 
 
