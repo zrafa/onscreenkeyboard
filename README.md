@@ -21,9 +21,10 @@ http://youtu.be/zHOJGq4hkpg
 How to use
 ==========
 
+Be sure that /dev/input/event0 is your real keyboard, you need it to choose keys from onscreen keyboard
+
 make
 modprobe uinput
-# be sure that /dev/input/event0 is your real keyboard (you need it to choose keys from onscreen keyboard)
 ./osk #YOU NEED TO BE ROOT
 
 You will see the on screen keyboard on console on top of framebuffer.
