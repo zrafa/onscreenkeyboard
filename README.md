@@ -21,3 +21,6 @@ verify that these use just the below libraries :
         /lib/ld-linux.so.2 (0xb7786000)
 
 which is that we want, in order to have on-screen keyboard ready on boot time.
+
+
+The image.ppm is the keyboard image. We did it with Gimp and exported as raw ppm.
