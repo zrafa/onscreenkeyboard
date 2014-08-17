@@ -3,6 +3,7 @@ onscreenkeyboard
 
 
 This is a framebuffer on-screen keyboard proof of concept
+for text console or X. Might be usefull at boot time for accessibility.
 
 
 ```
@@ -39,6 +40,7 @@ How to use
 
 make
 modprobe uinput
+# run on text console or X
 ./osk &  #YOU NEED TO BE ROOT
 
 # Use "END" key from your keyboard to choose a key from the

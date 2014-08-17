@@ -1,6 +1,7 @@
 
 /*
  * osk.c : framebuffer on-screen keyboard
+ * 	   Might be usefull at boot time for accessibility.
  * 
  * Copyright (C) 2014 Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>
  *
