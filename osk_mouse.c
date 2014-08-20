@@ -200,7 +200,7 @@ int main(void) {
      long int location = 0;
 
 	/* uinput init */
-	int i,fd;
+	int i,fd, fdmouse;
 	struct uinput_user_dev device;
 	memset(&device, 0, sizeof device);
 
@@ -281,10 +281,10 @@ int main(void) {
 
 	/* init mouse */
 	int fdm;
-	fdm = open("/dev/input/event0", O_RDONLY);
+	// fdm = open("/dev/input/event0", O_RDONLY);
 	struct input_event evm;
 
-    if((fd = open(MOUSEFILE, O_RDONLY | O_NONBLOCK)) == -1) {
+    if((fdm = open(MOUSEFILE, O_RDONLY | O_NONBLOCK)) == -1) {
         printf("Device open ERROR\n");
         exit(EXIT_FAILURE);
     }
@@ -296,6 +296,8 @@ int main(void) {
     int absolute_x,absolute_y;
 	/* end init mouse */
 
+	int pressed=0;
+	int pressedk=0;
 
 	int j, m=0,k;
 	while(1) {
@@ -303,7 +305,7 @@ int main(void) {
 		if (m==29) m=0; /* 27 keys, and 2 extra seconds for exit */
 
 
-		fb_drawimage("imagen_mouse.ppm", fbp, vinfo.xoffset, vinfo.yoffset, vinfo.bits_per_pixel, finfo.line_length, vinfo.xres);
+		fb_drawimage("image_mouse.ppm", fbp, vinfo.xoffset, vinfo.yoffset, vinfo.bits_per_pixel, finfo.line_length, vinfo.xres);
 
 /*
 		for (j=0;j<54;j=j+2) {
@@ -341,7 +343,7 @@ int main(void) {
 
 
 
- 	ret=read(fd, &evm, sizeof(struct input_event));
+ 	ret=read(fdm, &evm, sizeof(struct input_event));
 	if (ret!=-1) {
         unsigned char *ptr = (unsigned char*)&evm;
         int i;       
@@ -390,7 +392,18 @@ int main(void) {
             printf("Absolute x,y coords origin recorded\n");
         }
 
-        printf("LETRA = %i \n", (rkp*10+ckp));
+        if (bLeft==1) {
+		pressed=1;
+		pressedk=(rkp*10)+ckp;
+        } else if ((bLeft==0) && (pressed==1)) {
+		pressed=0;
+		send_event(fd, EV_KEY, abc[pressedk], 1);
+		send_event(fd, EV_SYN, SYN_REPORT, 0);
+		send_event(fd, EV_KEY, abc[pressedk], 0);
+		send_event(fd, EV_SYN, SYN_REPORT, 0);
+	}
+
+        /* printf("LETRA = %i \n", (rkp*10+ckp)); */
 	}
 
 
@@ -406,11 +419,14 @@ int main(void) {
 	y2=y1+4;
 	//fb_drawbox(fbp, (vinfo.xres-220)+((220/10)*(ckp+1)), (120/5)*(rkp+1), vinfo.bits_per_pixel, finfo.line_length);
 	fb_drawbox(fbp, x1, y1, x2, y2, vinfo.bits_per_pixel, finfo.line_length);
+
+	y1=(altoi/nro_filas)*(rkp)+(altoi/nro_filas-4); // The "4" here is a ugly hardcoded number of pixels less
+	y2=y1+4;		/* 4 is the height of the line */
+	fb_drawbox(fbp, x1, y1, x2, y2, vinfo.bits_per_pixel, finfo.line_length);
 	usleep(1000);
 	// 240 width image keyboard on screen
 	// 125 height
 	// vinfo.xres x res
-//		fb_drawimage("imagen_mouse.ppm", fbp, vinfo.xoffset, vinfo.yoffset, vinfo.bits_per_pixel, finfo.line_length, vinfo.xres);
 
 
 
@@ -449,6 +465,7 @@ int main(void) {
 
 
 	close(fd);
+	close(fdm);
 
 
 
