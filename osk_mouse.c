@@ -169,7 +169,7 @@ int send_event(int fd, __u16 type, __u16 code, __s32 value)
     return 0;
 }
 
-static void fb_drawbox(char *fbp, int xx, int yy, int lenght)
+static void fb_drawbox(char *fbp, int xx, int yy, int bpp, int length)
 {
 	int x, y;
 	long int location = 0;
@@ -177,7 +177,7 @@ static void fb_drawbox(char *fbp, int xx, int yy, int lenght)
      		for (y = 0; y < 10; y++)
        		for (x = 0; x < 8; x++) {
 
-			location = ((xx+x) * (bpp/8) + (yy+y) * length;
+			location = (xx+x) * (bpp/8) + (yy+y) * length;
 
 			*(fbp + location) = 100;
 			*(fbp + location + 1) = 100;
@@ -305,6 +305,7 @@ int main(void) {
 
 		fb_drawimage("imagen_mouse.ppm", fbp, vinfo.xoffset, vinfo.yoffset, vinfo.bits_per_pixel, finfo.line_length, vinfo.xres);
 
+/*
 		for (j=0;j<54;j=j+2) {
      		for (y = 20; y < 30; y++)
          		for (x = 12*j; x < 12*j+8; x++) {
@@ -323,7 +324,8 @@ int main(void) {
 				}
 				*(fbp + location + 3) = 100;      // No transparency
 			} else  { /* assume 16bpp */
-				int b = 10;
+
+/*				int b = 10;
 				int g = (x-100)/6;     // A little green
 				int r = 31-(y-100)/16;    // A lot of red
 				unsigned short int t = r<<11 | g << 5 | b;
@@ -332,6 +334,7 @@ int main(void) {
 
 		}
 		}
+*/
 
 
 		/* check for mouse */
@@ -391,6 +394,11 @@ int main(void) {
 	}
 
 
+	fb_drawbox(fbp, (vinfo.xres-220)+((220/10)*(ckp+1)), (120/5)*(rkp+1), vinfo.bits_per_pixel, finfo.line_length);
+	usleep(500);
+	// 225 width image keyboard on screen
+	// vinfo.xres x res
+//		fb_drawimage("imagen_mouse.ppm", fbp, vinfo.xoffset, vinfo.yoffset, vinfo.bits_per_pixel, finfo.line_length, vinfo.xres);
 
 
 
