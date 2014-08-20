@@ -198,7 +198,7 @@
 */
 
 
-unsigned char abc[] = {KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I, KEY_O, KEY_P, KEY_A, KEY_S, KEY_D, KEY_F, KEY_G, KEY_H, KEY_J, KEY_K, KEY_L, KEY_ENTER, KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_N, KEY_M, KEY_COMMA, KEY_DOT, KEY_ENTER, 0, KEY_SPACE, KEY_SPACE, KEY_SPACE, KEY_COMMA, KEY_DOT, KEY_DOT, KEY_DOT, KEY_BACKSPACE};
+unsigned char abc[] = {KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_Y, KEY_U, KEY_I, KEY_O, KEY_P, KEY_A, KEY_S, KEY_D, KEY_F, KEY_G, KEY_H, KEY_J, KEY_K, KEY_L, KEY_ENTER, KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_N, KEY_M, KEY_COMMA, KEY_DOT, KEY_ENTER, 0, KEY_SPACE, KEY_SPACE, KEY_SPACE, KEY_COMMA, KEY_DOT, KEY_DOT, KEY_DOT, KEY_DOT, KEY_BACKSPACE};
 
 
 
@@ -316,11 +316,9 @@ int main(void) {
      struct fb_fix_screeninfo finfo;
      long int screensize = 0;
      char *fbp = 0;
-     int x = 0, y = 0;
-     long int location = 0;
 
 	/* uinput init */
-	int i,fd, fdmouse;
+	int i,fd;
 	struct uinput_user_dev device;
 	memset(&device, 0, sizeof device);
 
@@ -410,7 +408,6 @@ int main(void) {
     }
 
 	int ret, xp=0, yp=0, rkp=0, ckp=0;
-	int ptr = 0;
     unsigned char button,bLeft,bMiddle,bRight;
     char xm,ym;
     int absolute_x,absolute_y;
@@ -419,7 +416,7 @@ int main(void) {
 	int pressed=0;
 	int pressedk=0;
 
-	int j, m=0,k;
+	int j, m=0;
 	while(1) {
 		m++;
 		if (m==29) m=0; /* 27 keys, and 2 extra seconds for exit */
@@ -433,7 +430,6 @@ int main(void) {
  	ret=read(fdm, &evm, sizeof(struct input_event));
 	if (ret!=-1) {
         unsigned char *ptr = (unsigned char*)&evm;
-        int i;       
 
         button=ptr[0];
         bLeft = button & 0x1;
@@ -450,25 +446,20 @@ int main(void) {
 
 	if (xp==UMBRAL) {
 		xp=0;
-		printf("x DERECHA");
 		ckp++; if (ckp>9) ckp=9;
 	} else if (xp==-UMBRAL) {
 		xp=0;
-		printf("x IZQUIERDA");
 		ckp--; if (ckp<0) ckp=0;
 	}
 
 	if (yp==UMBRAL) {
 		yp=0;
-		printf("y ABAJO");
 		rkp++; if (rkp>4) rkp=4;
 	} else if (yp==-UMBRAL) {
 		yp=0;
-		printf("y ARRIBA");
 		rkp--; if (rkp<0) rkp=0;
 	}
 
-//printf("bLEFT:%d, bMIDDLE: %d, bRIGHT: %d, rx: %d  ry=%d\n",bLeft,bMiddle,bRight, x,y);
 
         absolute_x+=xm;
         absolute_y-=ym;
@@ -491,7 +482,6 @@ int main(void) {
 		send_event(fd, EV_SYN, SYN_REPORT, 0);
 	}
 
-        /* printf("LETRA = %i \n", (rkp*10+ckp)); */
 	}
 
 
