@@ -169,15 +169,15 @@ int send_event(int fd, __u16 type, __u16 code, __s32 value)
     return 0;
 }
 
-static void fb_drawbox(char *fbp, int xx, int yy, int bpp, int length)
+static void fb_drawbox(char *fbp, int x1, int y1, int x2, int y2, int bpp, int length)
 {
 	int x, y;
 	long int location = 0;
 
-     		for (y = 0; y < 10; y++)
-       		for (x = 0; x < 8; x++) {
+     		for (y = y1; y < y2; y++)
+       		for (x = x1; x < x2; x++) {
 
-			location = (xx+x) * (bpp/8) + (yy+y) * length;
+			location = (x) * (bpp/8) + (y) * length;
 
 			*(fbp + location) = 100;
 			*(fbp + location + 1) = 100;
@@ -394,9 +394,21 @@ int main(void) {
 	}
 
 
-	fb_drawbox(fbp, (vinfo.xres-220)+((220/10)*(ckp+1)), (120/5)*(rkp+1), vinfo.bits_per_pixel, finfo.line_length);
-	usleep(500);
-	// 225 width image keyboard on screen
+	// fb_drawbox(fbp, (vinfo.xres-220)+((220/10)*(ckp+1)), (120/5)*(rkp+1), vinfo.bits_per_pixel, finfo.line_length);
+	int x1, x2, y1, y2;
+	int anchoi = 240;
+	int altoi = 125;
+	int nro_columnas=10;
+	int nro_filas=5;
+	x1=(vinfo.xres-anchoi)+((anchoi/nro_columnas)*(ckp));
+	x2=x1+(anchoi/nro_columnas);
+	y1=(altoi/nro_filas)*(rkp);
+	y2=y1+4;
+	//fb_drawbox(fbp, (vinfo.xres-220)+((220/10)*(ckp+1)), (120/5)*(rkp+1), vinfo.bits_per_pixel, finfo.line_length);
+	fb_drawbox(fbp, x1, y1, x2, y2, vinfo.bits_per_pixel, finfo.line_length);
+	usleep(1000);
+	// 240 width image keyboard on screen
+	// 125 height
 	// vinfo.xres x res
 //		fb_drawimage("imagen_mouse.ppm", fbp, vinfo.xoffset, vinfo.yoffset, vinfo.bits_per_pixel, finfo.line_length, vinfo.xres);
 
