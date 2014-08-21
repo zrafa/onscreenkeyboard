@@ -4,22 +4,23 @@ onscreenkeyboard
 
 This is a framebuffer on-screen keyboard proof of concept
 for text console or X. Might be usefull at boot time for accessibility.
+Currently, you can move or roll the mouse/trackball to the proper key, then hit the left mouse button to send the keystroke to the system, like a real keyboard.
 
 
 ```
  * Copyright (C) 2014 Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>
  *
- *   osk.c is free software; you can redistribute it and/or modify
+ *   osk.c and osk_mouse.c is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation; either version 2 of the License, or
  *   (at your option) any later version. Check COPYING file.
 ```
 
-osk.c source file implements this.
+osk_mouse.c and osk.c source file implements this.
 
  - No extra libraries. Great for using at boot time :
 ```
-	# ldd osk
+	# ldd osk_mouse
         linux-gate.so.1 
         libc.so.6 => /lib/i386-linux-gnu/i686/cmov/libc.so.6 
         /lib/ld-linux.so.2 
