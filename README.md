@@ -28,7 +28,10 @@ osk_mouse.c and osk.c source file implements this.
  - on scren keyboard using framebuffer. Ok for console
  - it sends keystrokes using uinput
 
-Check the video to know the idea and proof of concept working :
+Check the videos to know the idea and proof of concept working :
+
+http://youtu.be/TwYQzoEr5Lw
+
 http://youtu.be/zHOJGq4hkpg
 
 
