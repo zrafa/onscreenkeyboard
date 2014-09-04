@@ -38,6 +38,26 @@ http://youtu.be/zHOJGq4hkpg
 How to use
 ==========
 
+Mouse/trackball version
+-----------------------
+
+```
+# Be sure that /dev/input/mice is your real mouse/trackball, 
+# you need it to choose keys from onscreen keyboard
+# Check which is your framebuffer device (/dev/fb0, /dev/fb1, etc)
+
+make
+modprobe uinput
+# run on text console or X
+./osk_mouse &  #YOU NEED TO BE ROOT
+
+The 'E' symbol is ENTER. 'B' backspace.
+
+```
+
+Keyboard version
+----------------
+
 ```
 # Be sure that /dev/input/event0 is your real keyboard, 
 # you need it to choose keys from onscreen keyboard
