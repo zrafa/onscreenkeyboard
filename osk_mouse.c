@@ -49,13 +49,13 @@ unsigned char abc[] = {KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, K
 /*
  *	Draw image from PPM file
  */
-static void fb_drawimage(const char *filename, char *fbp, int xo, int yo, int bpp, int length, int xres) 
-{
+static void fb_drawimage(const char *filename, char *fbp, int xo, int yo, int bpp, int length, int xres, unsigned *img_height, unsigned *img_width) {
+
 	char head[256];
 	char s[80];
 	FILE *theme_file;
 	unsigned char *pixline;
-	unsigned i, j, width, height, line_size;
+	unsigned i, j, line_size;
 
 	memset(head, 0, sizeof(head));
 	theme_file = fopen(filename, "r");
@@ -82,16 +82,16 @@ static void fb_drawimage(const char *filename, char *fbp, int xo, int yo, int bp
 		}
 
 		/* width, height, max_color_val */
-		if (sscanf(head, "P6 %u %u %u", &width, &height, &i) == 3)
+		if (sscanf(head, "P6 %u %u %u", img_width, img_height, &i) == 3)
 			break;
 		/* TODO: i must be <= 255! */
 	}
 
-	line_size = width*3;
+	line_size = *img_width*3;
 
 	long int location = 0;
 	pixline = malloc(line_size);
-	for (j = 0; j < height; j++) {
+	for (j = 0; j < *img_height; j++) {
 		unsigned char *pixel = pixline;
 
 		if (fread(pixline, 1, line_size, theme_file) != line_size) {
@@ -99,9 +99,9 @@ static void fb_drawimage(const char *filename, char *fbp, int xo, int yo, int bp
 			exit(1);
 		}
 
-		for (i = 0; i < width; i++) {
+		for (i = 0; i < *img_width; i++) {
 			pixel += 3;
-			location = ((xres-width)+i+xo) * (bpp/8) + (j+yo) * length;
+			location = ((xres - *img_width)+i+xo) * (bpp/8) + (j+yo) * length;
 
 			*(fbp + location) = (((unsigned)pixel[0]));
 			*(fbp + location + 1) = (((unsigned)pixel[1]));
@@ -159,6 +159,9 @@ int main(void) {
      struct fb_fix_screeninfo finfo;
      long int screensize = 0;
      char *fbp = 0;
+     /* img dimensions set in fb_drawimage */
+     unsigned img_height = 0;
+     unsigned img_width = 0;
 
 	/* uinput init */
 	int i,fd;
@@ -262,7 +265,7 @@ int main(void) {
 
 	while(1) {
 
-		fb_drawimage("image_mouse.ppm", fbp, vinfo.xoffset, vinfo.yoffset, vinfo.bits_per_pixel, finfo.line_length, vinfo.xres);
+		fb_drawimage("image_mouse.ppm", fbp, vinfo.xoffset, vinfo.yoffset, vinfo.bits_per_pixel, finfo.line_length, vinfo.xres, &img_height, &img_width);
 
 
 		/* check mouse */
@@ -322,8 +325,8 @@ int main(void) {
 
 		/* the whole mess to draw the pointer/cursor */
 		int x1, x2, y1, y2;
-		int anchoi = 240;	/* width of keyboard image */
-		int altoi = 125;	/* height of keyboard image */
+		int anchoi = img_width;	/* width of keyboard image */
+		int altoi = img_height;	/* height of keyboard image */
 		int nro_columnas=10;
 		int nro_filas=5;
 
